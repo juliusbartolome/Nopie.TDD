@@ -6,7 +6,17 @@ namespace Nopie.TDD.FizzBuzzKata
     {
         public string GetResult(int number)
         {
-            return "0";
+            bool isFizz = number % 3 == 0 || number.ToString().Contains("3");
+            bool isBuzz = number % 5 == 0 || number.ToString().Contains("5");
+
+            if (isFizz && isBuzz)
+                return "FizzBuzz";
+            else if (isFizz)
+                return "Fizz";
+            else if (isBuzz)
+                return "Buzz";
+
+            return number.ToString();
         }        
     }
 }
