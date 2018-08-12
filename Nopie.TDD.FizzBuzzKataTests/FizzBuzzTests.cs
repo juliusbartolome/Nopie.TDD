@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using Nopie.TDD.FizzBuzzKata;
+using System;
 
 namespace Nopie.TDD.FizzBuzzKataTests
 {
@@ -66,6 +67,7 @@ namespace Nopie.TDD.FizzBuzzKataTests
         [Test]
         [TestCase(25, "Buzz")]
         [TestCase(65, "Buzz")]
+        [TestCase(100, "Buzz")]
         public void GetResult_WhenPassedWithNumberFive_ShouldReturn_Buzz(int number, string expectedResult)
         {
             var actualResult = _fizzBuzz.GetResult(number);
@@ -79,6 +81,16 @@ namespace Nopie.TDD.FizzBuzzKataTests
         {
             var actualResult = _fizzBuzz.GetResult(number);
             Assert.That(actualResult, Is.EqualTo(expectedResult));
+        }
+
+        [Test]
+        [TestCase(0)]
+        [TestCase(-1)]
+        [TestCase(101)]
+        public void GetResult_WhenPassedWithNumberLessThanOne_ShouldThrow_ArgumentOutOfRangeException(int number)
+        {
+            var exception = Assert.Throws<ArgumentOutOfRangeException>(() => _fizzBuzz.GetResult(number));
+            Assert.That(exception.Message, Is.EqualTo(string.Format("Entered number [{0}] does not meet the rule, entered number should be between 1 and 100\nParameter name: number", number)));
         }
     }
 }
