@@ -2,7 +2,8 @@
 
 namespace Nopie.TDD.FizzBuzzKata
 {
-    public class Class1
+    public class FizzBuzz
     {
+        
     }
 }
