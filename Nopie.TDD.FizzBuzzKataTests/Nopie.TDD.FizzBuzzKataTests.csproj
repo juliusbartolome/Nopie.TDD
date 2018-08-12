@@ -2,12 +2,16 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-
     <IsPackable>false</IsPackable>
+    <DisablePackageAssetsCache>true</DisablePackageAssetsCache>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="nunit" Version="3.7.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Nopie.TDD.FizzBuzzKata\Nopie.TDD.FizzBuzzKata.csproj" />
   </ItemGroup>
 
 </Project>
