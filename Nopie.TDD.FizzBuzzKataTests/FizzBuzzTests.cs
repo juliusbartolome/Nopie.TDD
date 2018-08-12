@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using Nopie.TDD.FizzBuzzKata;
 
 namespace Nopie.TDD.FizzBuzzKataTests
 {
@@ -19,10 +20,9 @@ namespace Nopie.TDD.FizzBuzzKataTests
 
         [Test]
         [TestCase(0, "0")]
-        public void GetResult_PassingZeroAsArgument_ShouldReturn_Zero(int zeroNumber, string expectedResult)
+        public void GetResult_WhenPassedWithZero_ShouldReturn_Zero(int number, string expectedResult)
         {
-            var actualResult = _fizzBuzz.GetResult(zeroNumber);
-
+            var actualResult = _fizzBuzz.GetResult(number);
             Assert.That(actualResult, Is.EqualTo(expectedResult));
         }
     }
