@@ -16,18 +16,13 @@ namespace Nopie.TDD.BowlingGameKataTests
         }
 
         [Test]
-        public void Roll_WhenPassedByZero_ShouldNotThrowAnError()
+        public void Score_WhenCalled_ShouldReturnZeroByDefault()
         {
             var game = new Game();
-            game.Roll(0);
-            Assert.Pass();
-        }
+            var score = game.Score();
+            
+            Assert.That(score, Is.EqualTo(0));
 
-        public void Score_CanBeCalled()
-        {
-            var game = new Game();
-            game.Score();
-            Assert.Pass();
         }
     }
 }
