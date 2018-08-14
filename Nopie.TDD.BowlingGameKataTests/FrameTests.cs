@@ -41,7 +41,6 @@ namespace Nopie.TDD.BowlingGameKataTests
             Assert.Pass();
         }
 
-
         [Test]
         [TestCase(1, 1)]
         [TestCase(2, 2)]
@@ -56,7 +55,6 @@ namespace Nopie.TDD.BowlingGameKataTests
 
             Assert.That(frame.Score, Is.EqualTo(expectedScore));
         }
-
         
         [Test]
         [TestCase(0, 0, 0)]
@@ -82,6 +80,59 @@ namespace Nopie.TDD.BowlingGameKataTests
             frame.Roll(0);
             frame.Roll(0);
             Assert.Throws<InvalidOperationException>(() => frame.Roll(0));
+        }
+
+        [Test]
+        [TestCase(11)]
+        [TestCase(-1)]
+        public void Roll_WhenPassedWithInvalidPinCountInFirstRoll_ShouldThrowInvalidArgumentException(int pinCount)
+        {
+            var frame = new Frame();
+            Assert.Throws<ArgumentException>(() => frame.Roll(pinCount));
+        }
+
+        [Test]
+        [TestCase(11)]
+        [TestCase(-1)]
+        public void Roll_WhenPassedWithInvalidPinCountInSecondRoll_ShouldThrowInvalidArgumentException(int pinCount)
+        {
+            var frame = new Frame();
+            frame.Roll(0);
+            Assert.Throws<ArgumentException>(() => frame.Roll(pinCount));
+        }
+
+        [Test]
+        [TestCase(10, 10)]
+        public void Roll_WhenPassedWithInvalidTotalPinCountInTwoRolls_ShouldThrowInvalidOperationtException(int firstRollPinCount, int secondRollPinCount)
+        {
+            var frame = new Frame();
+            frame.Roll(firstRollPinCount);
+            Assert.Throws<InvalidOperationException>(() => frame.Roll(secondRollPinCount));
+        }
+
+        [Test]
+        public void Roll_WhenPassedWithTenPinCountInOneRoll_ShouldSetProperty_IsStrikeToTrueAndIsSpareToFalse()
+        {
+            var frame = new Frame();
+            
+            frame.Roll(10);
+            
+            Assert.IsTrue(frame.IsStrike);
+            Assert.IsFalse(frame.IsSpare);
+        }
+
+        [Test]
+        [TestCase(0, 10)]
+        [TestCase(2, 8)]
+        public void Roll_WhenPassedWithTenPinCountInTwoRolls_ShouldSetProperty_IsSpaceToTrueIsStrikeToFalse(int firstRollPinCount, int secondRollPinCount)
+        {
+            var frame = new Frame();
+            
+            frame.Roll(firstRollPinCount);
+            frame.Roll(secondRollPinCount);
+
+            Assert.IsTrue(frame.IsSpare);
+            Assert.IsFalse(frame.IsStrike);
         }
     }
 }
