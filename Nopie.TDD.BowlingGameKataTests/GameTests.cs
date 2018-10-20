@@ -49,29 +49,29 @@ namespace Nopie.TDD.BowlingGameKataTests
         }
 
         [Test]
-        public void CurrentFrame_WhenCalled_BeforeAnyRoll_ShouldReturnOne()
+        public void CurrentFrameCount_WhenCalled_BeforeAnyRoll_ShouldReturnOne()
         {
-            Assert.That(sutGame.CurrentFrame, Is.EqualTo(1));
+            Assert.That(sutGame.CurrentFrameCount, Is.EqualTo(1));
         }
 
         [Test]
-        public void CurrentFrame_WhenCalled_AfterRollingTenPins_ShouldIncrementCurrentFrameByOne()
+        public void CurrentFrameCount_WhenCalled_AfterRollingTenPins_ShouldIncrementCurrentFrameCountByOne()
         {
-            var expectedCurrentFrame = sutGame.CurrentFrame + 1;
+            var expectedCurrentFrameCount = sutGame.CurrentFrameCount + 1;
 
             sutGame.Roll(10);
 
-            Assert.That(sutGame.CurrentFrame, Is.EqualTo(expectedCurrentFrame));
+            Assert.That(sutGame.CurrentFrameCount, Is.EqualTo(expectedCurrentFrameCount));
         }
 
         [Test]
-        public void CurrentFrame_WhenCalled_AfterRollingPinsLessThanTen_ShouldNotIncrementCurrentFrame()
+        public void CurrentFrameCount_WhenCalled_AfterRollingPinsLessThanTen_ShouldNotIncrementCurrentFrameCount()
         {
-            var expectedCurrentFrame = sutGame.CurrentFrame;
+            var expectedCurrentFrameCount = sutGame.CurrentFrameCount;
 
             sutGame.Roll(9);
 
-            Assert.That(sutGame.CurrentFrame, Is.EqualTo(expectedCurrentFrame));
+            Assert.That(sutGame.CurrentFrameCount, Is.EqualTo(expectedCurrentFrameCount));
         }
     }
 }
