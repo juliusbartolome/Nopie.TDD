@@ -6,14 +6,16 @@ namespace Nopie.TDD.BowlingGameKata
 {
     public class Frame
     {
-        private const int  MAX_ROLLS = 2;
+        public const int  MAX_ROLLS = 2;
         private const int MAX_PIN_COUNT = 10;
         private const int MIN_PIN_COUNT = 0;
         private List<int> _rolls = new List<int>();
 
-        public int Score { get => _rolls.Sum(); }
-        public bool IsStrike { get => _rolls.Count == 1 && _rolls[0] == MAX_PIN_COUNT; }
-        public bool IsSpare { get => _rolls.Count == MAX_ROLLS && Score == MAX_PIN_COUNT; }
+        public int Score => _rolls.Sum();
+        public bool IsStrike => _rolls.Count == 1 && _rolls[0] == MAX_PIN_COUNT;
+        public bool IsSpare => _rolls.Count == MAX_ROLLS && Score == MAX_PIN_COUNT;
+
+        public bool IsDone => _rolls.Count == MAX_ROLLS || IsStrike || IsSpare;
 
         public void Roll(int pinCount)
         {

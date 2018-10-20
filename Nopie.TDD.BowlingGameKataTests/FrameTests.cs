@@ -6,24 +6,29 @@ namespace Nopie.TDD.BowlingGameKataTests
 {
     public class FrameTests
     {
+        private Frame frame;
+
+        [SetUp]
+        public void Setup()
+        {
+            frame = new Frame();
+        }
+
         [Test]
         public void Score_WhenAccessedWithoutAnyRoll_ShouldReturnZero()
         {
-            var frame = new Frame();
             Assert.That(frame.Score, Is.EqualTo(0));
         }
 
         [Test]
         public void IsStrike_WhenAccessedWithoutAnyRoll_ShouldReturnFalse()
         {
-            var frame = new Frame();
             Assert.IsFalse(frame.IsStrike);
         }
 
         [Test]
         public void IsSpare_WhenAccessedWithoutAnyRoll_ShouldReturnFalse()
         {
-            var frame = new Frame();
             Assert.IsFalse(frame.IsSpare);
         }
 
@@ -35,7 +40,6 @@ namespace Nopie.TDD.BowlingGameKataTests
         [TestCase(10)]
         public void Roll_WhenPassedWithValidPinCount_ShouldNotThrowError(int pinCount)
         {
-            var frame = new Frame();
 
             frame.Roll(pinCount);
             Assert.Pass();
@@ -49,7 +53,6 @@ namespace Nopie.TDD.BowlingGameKataTests
         [TestCase(5, 5)]
         public void Roll_WhenPassedWithSingleRollPinCountAndValidRollPinCount_ShouldCountAsScore(int firstRollPinCount, int expectedScore)
         {
-            var frame = new Frame();
 
             frame.Roll(firstRollPinCount);
 
@@ -64,7 +67,6 @@ namespace Nopie.TDD.BowlingGameKataTests
         [TestCase(2, 3, 5)]
         public void Roll_WhenPassedWithValidRollPinCountsAndDoubleRoll_ShouldReturnExpectedScore(int firstRollPinCount, int secondRollPinCount, int expectedScore)
         {
-            var frame = new Frame();
 
             frame.Roll(firstRollPinCount);
             frame.Roll(secondRollPinCount);
@@ -75,7 +77,6 @@ namespace Nopie.TDD.BowlingGameKataTests
         [Test]
         public void Roll_WhenCalledMoreThanTwoTimesWithValidPinCount_ShouldThrowInvalidOperationException()
         {
-            var frame = new Frame();
 
             frame.Roll(0);
             frame.Roll(0);
@@ -87,7 +88,6 @@ namespace Nopie.TDD.BowlingGameKataTests
         [TestCase(-1)]
         public void Roll_WhenPassedWithInvalidPinCountInFirstRoll_ShouldThrowInvalidArgumentException(int pinCount)
         {
-            var frame = new Frame();
             Assert.Throws<ArgumentException>(() => frame.Roll(pinCount));
         }
 
@@ -96,7 +96,6 @@ namespace Nopie.TDD.BowlingGameKataTests
         [TestCase(-1)]
         public void Roll_WhenPassedWithInvalidPinCountInSecondRoll_ShouldThrowInvalidArgumentException(int pinCount)
         {
-            var frame = new Frame();
             frame.Roll(0);
             Assert.Throws<ArgumentException>(() => frame.Roll(pinCount));
         }
@@ -105,7 +104,6 @@ namespace Nopie.TDD.BowlingGameKataTests
         [TestCase(10, 10)]
         public void Roll_WhenPassedWithInvalidTotalPinCountInTwoRolls_ShouldThrowInvalidOperationtException(int firstRollPinCount, int secondRollPinCount)
         {
-            var frame = new Frame();
             frame.Roll(firstRollPinCount);
             Assert.Throws<InvalidOperationException>(() => frame.Roll(secondRollPinCount));
         }
@@ -113,7 +111,6 @@ namespace Nopie.TDD.BowlingGameKataTests
         [Test]
         public void Roll_WhenPassedWithTenPinCountInOneRoll_ShouldSetProperty_IsStrikeToTrueAndIsSpareToFalse()
         {
-            var frame = new Frame();
             
             frame.Roll(10);
             
@@ -126,13 +123,70 @@ namespace Nopie.TDD.BowlingGameKataTests
         [TestCase(2, 8)]
         public void Roll_WhenPassedWithTenPinCountInTwoRolls_ShouldSetProperty_IsSpaceToTrueIsStrikeToFalse(int firstRollPinCount, int secondRollPinCount)
         {
-            var frame = new Frame();
             
             frame.Roll(firstRollPinCount);
             frame.Roll(secondRollPinCount);
 
             Assert.IsTrue(frame.IsSpare);
             Assert.IsFalse(frame.IsStrike);
+        }
+
+        [Test]
+        public void Roll_WhenCalledMoreThanMaxRolls_ShouldThrowAnInvalidOperationException()
+        {
+            for (int i = 0; i < Frame.MAX_ROLLS; i++)
+            {
+                frame.Roll(0);
+            }
+
+            Assert.Throws<InvalidOperationException>(() => frame.Roll(0));
+        }
+
+        [Test]
+        public void IsDone_WhenAccessed_WithoutAnyRoll_ShouldReturnFalse()
+        {
+            Assert.IsFalse(frame.IsDone);
+        }
+
+        [Test]
+        public void IsDone_WhenAccessed_WithFrameIsSpare_ShouldReturnTrue()
+        {
+            frame.Roll(0);
+            frame.Roll(10);
+
+            Assert.IsTrue(frame.IsSpare);
+            Assert.IsTrue(frame.IsDone);
+        }
+
+        [Test]
+        public void IsDone_WhenAccessed_WithFrameIsStrike_ShouldReturnTrue()
+        {
+            frame.Roll(10);
+
+            Assert.IsTrue(frame.IsStrike);
+            Assert.IsTrue(frame.IsDone);
+        }
+
+        [Test]
+        public void IsDone_WhenAccessed_WithRollsEqualToMaxRolls_EvenWithoutRolledPins_ShouldReturnTrue()
+        {
+            for (int i = 0; i < Frame.MAX_ROLLS; i++)
+            {
+                frame.Roll(0);
+            }
+
+            Assert.IsTrue(frame.IsDone);
+        }
+
+        [Test]
+        public void IsDone_WhenAccess_WithRollLessThanMaxRolls_WithoutRolledPins_ShouldReturnFalse()
+        {
+            for (int i = 0; i < Frame.MAX_ROLLS - 1; i++)
+            {
+                frame.Roll(0);
+            }
+
+            Assert.IsFalse(frame.IsDone);
         }
     }
 }
