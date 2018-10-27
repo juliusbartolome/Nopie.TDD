@@ -21,6 +21,19 @@ namespace Nopie.TDD.BowlingGameKataTests
         }
 
         [Test]
+        [TestCase(5, 5, 10)]
+        [TestCase(0, 10, 10)]
+        [TestCase(4, 2, 6)]
+        [TestCase(2, 2, 4)]
+        public void Score_WhenAccessedAfterRoll_ShouldReturnExpectedScore(int firstRoll, int secondRoll, int expectedScore)
+        {
+            frame.Roll(firstRoll);
+            frame.Roll(secondRoll);
+
+            Assert.AreEqual(frame.Score, expectedScore);
+        }
+
+        [Test]
         public void IsStrike_WhenAccessedWithoutAnyRoll_ShouldReturnFalse()
         {
             Assert.IsFalse(frame.IsStrike);
