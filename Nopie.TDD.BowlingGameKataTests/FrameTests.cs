@@ -50,9 +50,29 @@ namespace Nopie.TDD.BowlingGameKataTests
             frame.Roll(currentFrameFirstRoll);
             frame.Roll(currentFrameSecondRoll);
             
-            nextFrame.Roll(nextFrameFirstRoll);
             frame.NextFrame = nextFrame;
+            nextFrame.Roll(nextFrameFirstRoll);
 
+            Assert.That(frame.IsSpare, Is.True);
+            Assert.That(frame.Score, Is.EqualTo(expectedScore));
+        }
+
+        [Test]
+        [TestCase(10, 0)]
+        [TestCase(0, 10)]
+        [TestCase(1, 2)]
+        [TestCase(5, 5)]
+        public void Score_WhenIsStrike_ShouldAddTheFirstAndSecondRollOfTheNextFrameToScore(int nextFrameFirstRoll, int nextFrameSecondRoll)
+        {
+            var expectedScore = 10 + nextFrameFirstRoll + nextFrameSecondRoll;
+            var nextFrame = new Frame();
+
+            frame.Roll(10);
+            frame.NextFrame = nextFrame;
+            nextFrame.Roll(nextFrameFirstRoll);
+            nextFrame.Roll(nextFrameSecondRoll);
+
+            Assert.That(frame.IsStrike, Is.True);
             Assert.That(frame.Score, Is.EqualTo(expectedScore));
         }
 

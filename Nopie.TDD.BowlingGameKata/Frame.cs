@@ -22,6 +22,8 @@ namespace Nopie.TDD.BowlingGameKata
 
                 if (IsSpare)
                     score += NextFrame.Rolls.FirstOrDefault();
+                else if (IsStrike)
+                    score += NextFrame.Rolls.Take(2).Sum();
 
                 return score;
             }
