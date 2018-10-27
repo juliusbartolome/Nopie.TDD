@@ -9,26 +9,43 @@ namespace Nopie.TDD.BowlingGameKata
         public const int  MAX_ROLLS = 2;
         private const int MAX_PIN_COUNT = 10;
         private const int MIN_PIN_COUNT = 0;
-        private List<int> _rolls = new List<int>();
 
-        public int Score => _rolls.Sum();
-        public bool IsStrike => _rolls.Count == 1 && _rolls[0] == MAX_PIN_COUNT;
-        public bool IsSpare => _rolls.Count == MAX_ROLLS && Score == MAX_PIN_COUNT;
+        public List<int> Rolls = new List<int>();
+        public Frame NextFrame { get; set; }
+        public int Score 
+        {
+            get
+            {
+                int score = Rolls.Sum();
+                if (NextFrame == null)
+                    return score;
 
-        public bool IsDone => _rolls.Count == MAX_ROLLS || IsStrike || IsSpare;
+                if (IsSpare)
+                    score += NextFrame.Rolls.FirstOrDefault();
+
+                return score;
+            }
+        }
+        public bool IsStrike => Rolls.Count == 1 && Rolls[0] == MAX_PIN_COUNT;
+        public bool IsSpare => Rolls.Count == MAX_ROLLS && Rolls.Sum() == MAX_PIN_COUNT;
+        public bool IsDone => Rolls.Count == MAX_ROLLS || IsStrike || IsSpare;
 
         public void Roll(int pinCount)
         {
-            if (pinCount < MIN_PIN_COUNT || pinCount > MAX_PIN_COUNT)
+            if (IsValidPinCount(pinCount))
                 throw new ArgumentException(string.Format("Pin count should be between {0} and {1}", MIN_PIN_COUNT, MAX_PIN_COUNT), nameof(pinCount));
 
-            if ((pinCount + Score) >  MAX_PIN_COUNT)
-                throw new InvalidOperationException(string.Format("Total pins that can be rolled should not exceed {0}.", MIN_PIN_COUNT, MAX_PIN_COUNT));
-
-            if (_rolls.Count >= MAX_ROLLS)
+            if (CanRoll)
                 throw new InvalidOperationException(string.Format("{0} can only be called {1} times max.", nameof(Roll), MAX_ROLLS));
 
-            _rolls.Add(pinCount);
+            if (HasValidTotalPinCount(pinCount))
+                throw new InvalidOperationException(string.Format("Total pins that can be rolled should not exceed {0}.", MIN_PIN_COUNT, MAX_PIN_COUNT));
+
+            Rolls.Add(pinCount);
         }
+
+        private bool IsValidPinCount (int pinCount) => pinCount < MIN_PIN_COUNT || pinCount > MAX_PIN_COUNT;
+        private bool CanRoll => Rolls.Count >= MAX_ROLLS;
+        private bool HasValidTotalPinCount (int pinCount) => (pinCount + Rolls.Sum()) >  MAX_PIN_COUNT;
     }
 }

@@ -15,6 +15,12 @@ namespace Nopie.TDD.BowlingGameKataTests
         }
 
         [Test]
+        public void NextFrame_WhenAccessedInitially_ShouldReturnNull()
+        {
+            Assert.That(frame.NextFrame, Is.EqualTo(null));
+        }
+
+        [Test]
         public void Score_WhenAccessedWithoutAnyRoll_ShouldReturnZero()
         {
             Assert.That(frame.Score, Is.EqualTo(0));
@@ -31,6 +37,23 @@ namespace Nopie.TDD.BowlingGameKataTests
             frame.Roll(secondRoll);
 
             Assert.AreEqual(frame.Score, expectedScore);
+        }
+
+        [Test]
+        [TestCase(5, 5, 5)]
+        [TestCase(0, 10, 4)]
+        public void Score_WhenIsSpare_ShouldAddTheFirstRollOfTheNextFrameToScore(int currentFrameFirstRoll, int currentFrameSecondRoll, int nextFrameFirstRoll)
+        {
+            var expectedScore = currentFrameFirstRoll + currentFrameSecondRoll + nextFrameFirstRoll;
+            var nextFrame = new Frame();
+
+            frame.Roll(currentFrameFirstRoll);
+            frame.Roll(currentFrameSecondRoll);
+            
+            nextFrame.Roll(nextFrameFirstRoll);
+            frame.NextFrame = nextFrame;
+
+            Assert.That(frame.Score, Is.EqualTo(expectedScore));
         }
 
         [Test]
