@@ -32,9 +32,11 @@ namespace Nopie.TDD.BowlingGameKata
         {
             CurrentFrame.Roll(pins);
 
-            if (CurrentFrame.IsStrike || CurrentFrame.IsSpare)
+            if (CurrentFrame.IsDone)
             {
-                gameFrames.Add(new Frame());
+                Frame newFrame = new Frame();
+                CurrentFrame.NextFrame = newFrame;
+                gameFrames.Add(newFrame);
             }
         }
     }

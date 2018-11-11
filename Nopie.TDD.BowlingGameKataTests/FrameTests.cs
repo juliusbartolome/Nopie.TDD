@@ -58,6 +58,22 @@ namespace Nopie.TDD.BowlingGameKataTests
         }
 
         [Test]
+        public void Score_WhenIsSpare_ShouldAddIgnoreSecondRollOfNextFrame()
+        {
+            var expectedScore = 15;
+            var nextFrame = new Frame();
+
+            frame.Roll(5);
+            frame.Roll(5);
+            frame.NextFrame = nextFrame;
+            nextFrame.Roll(5);
+            nextFrame.Roll(5);
+
+            Assert.IsTrue(frame.IsSpare);
+            Assert.That(frame.Score, Is.EqualTo(expectedScore));
+        }
+
+        [Test]
         [TestCase(10, 0)]
         [TestCase(0, 10)]
         [TestCase(1, 2)]
@@ -73,6 +89,49 @@ namespace Nopie.TDD.BowlingGameKataTests
             nextFrame.Roll(nextFrameSecondRoll);
 
             Assert.That(frame.IsStrike, Is.True);
+            Assert.That(frame.Score, Is.EqualTo(expectedScore));
+        }
+
+        [Test]
+        public void Score_WhenIsStrikeAndFirstNextFrameIsStrike_ShouldAddSecondNextFrameFirstRoll()
+        {
+            var expectedScore = 30;
+            var firstNextFrame = new Frame();
+            var secondNextFrame = new Frame();
+            frame.NextFrame = firstNextFrame;
+            firstNextFrame.NextFrame = secondNextFrame;
+
+            frame.Roll(10);
+            firstNextFrame.Roll(10);
+            secondNextFrame.Roll(10);
+
+            Assert.IsTrue(frame.IsStrike);
+            Assert.IsTrue(firstNextFrame.IsStrike);
+            Assert.That(frame.Score, Is.EqualTo(expectedScore));
+        }
+
+        [Test]
+        public void Score_WhenIsStrikeAndNextFrameIsNull_ShouldReturnOriginalScore()
+        {
+            int expectedScore = 10;
+
+            frame.Roll(10);
+
+            Assert.IsTrue(frame.IsStrike);
+            Assert.That(frame.Score, Is.EqualTo(expectedScore));
+        }
+
+        [Test]
+        public void Score_WhenIsStrikeAndSecondNextFrameIsNull_ShouldReturnOriginalScore()
+        {
+            int expectedScore = 20;
+            var firstNextFrame = new Frame();
+            frame.NextFrame = firstNextFrame;
+
+            frame.Roll(10);
+            firstNextFrame.Roll(10);
+
+            Assert.IsTrue(frame.IsStrike);
             Assert.That(frame.Score, Is.EqualTo(expectedScore));
         }
 
